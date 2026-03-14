@@ -1,4 +1,8 @@
 using HrApp.Data;
+using HrApp.Services;
+using HrApp.Services.Interfaces;
+using HrApp.Services.Interfaces.HrApp.Services;
+using HrApp.Services.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+//builder.Services.AddScoped<IdentityService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
