@@ -2,6 +2,8 @@
 using HrApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Security.Policy;
 
 namespace HrApp.Controllers
 {
@@ -17,9 +19,13 @@ namespace HrApp.Controllers
         //}
 
         IIdentityService _identityService;
-        public AccountController(IIdentityService identityService)
+        SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        public AccountController(IIdentityService identityService, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _identityService = identityService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
         #region Login
         public IActionResult Login()
@@ -114,5 +120,59 @@ namespace HrApp.Controllers
         }
 
         #endregion
+
+        public IActionResult LoginExternalProvider()
+        {
+            string? redirectUrl = Url.Action("ExternalProviderResponse", "Account");
+            string scheme = "oidc";
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(
+                    scheme, redirectUrl);
+            return new ChallengeResult(scheme, properties);
+        }
+        public async Task<IActionResult> ExternalProviderResponse()
+        {
+            ExternalLoginInfo? externalLoginInfo =
+                await _signInManager.GetExternalLoginInfoAsync();
+            if (externalLoginInfo == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+            else
+            {
+                var user = await _userManager.FindByLoginAsync(externalLoginInfo.LoginProvider, externalLoginInfo.ProviderKey);
+                if (user == null)
+                {
+                    user = await CreateIdentityUserFromClaims(externalLoginInfo);
+                }
+                await _signInManager.SignInAsync(user, true);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        private async Task<IdentityUser?> CreateIdentityUserFromClaims(ExternalLoginInfo externalLoginInfo)
+        {
+            var claim = externalLoginInfo.Principal.FindFirst("email");
+            if(claim != null)
+            {
+                var email = claim.Value;
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    user = new IdentityUser {UserName = email, Email = email };
+                    var result = await _userManager.CreateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        return null;
+                    }
+                }
+                var loginResult = await _userManager.AddLoginAsync(user, externalLoginInfo);
+                if (loginResult.Succeeded)
+                {
+                    return user; 
+                }
+            }
+            return null;
+        }
+
     }
 }
+

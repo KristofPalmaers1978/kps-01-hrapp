@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp", "HrApp\HrApp.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrApp.TestProject", "HrApp.TestProject\HrApp.TestProject.csproj", "{0D87390D-D356-485F-88CD-20B598343788}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuendeIdentityServer", "DuendeIdentityServer\DuendeIdentityServer.csproj", "{4809BB2A-6A1C-4871-ADCF-EB547E518C39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0D87390D-D356-485F-88CD-20B598343788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D87390D-D356-485F-88CD-20B598343788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D87390D-D356-485F-88CD-20B598343788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4809BB2A-6A1C-4871-ADCF-EB547E518C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4809BB2A-6A1C-4871-ADCF-EB547E518C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4809BB2A-6A1C-4871-ADCF-EB547E518C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4809BB2A-6A1C-4871-ADCF-EB547E518C39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
